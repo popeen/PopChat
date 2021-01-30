@@ -99,6 +99,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_SEND_MESSAGE_WITH_ENTER = "SETTINGS_SEND_MESSAGE_WITH_ENTER"
         private const val SETTINGS_ENABLE_CHAT_EFFECTS = "SETTINGS_ENABLE_CHAT_EFFECTS"
         private const val SETTINGS_SHOW_EMOJI_KEYBOARD = "SETTINGS_SHOW_EMOJI_KEYBOARD"
+        private const val SETTINGS_SHOW_LIKE = "SETTINGS_SHOW_LIKE"
 
         // Help
         private const val SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY = "SETTINGS_SHOULD_SHOW_HELP_ON_ROOM_LIST_KEY"
@@ -209,6 +210,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
                 SETTINGS_PREVIEW_MEDIA_BEFORE_SENDING_KEY,
                 SETTINGS_SEND_MESSAGE_WITH_ENTER,
                 SETTINGS_SHOW_EMOJI_KEYBOARD,
+                SETTINGS_SHOW_LIKE,
 
                 SETTINGS_PIN_UNREAD_MESSAGES_PREFERENCE_KEY,
                 SETTINGS_PIN_MISSED_NOTIFICATIONS_PREFERENCE_KEY,
@@ -831,6 +833,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun showEmojiKeyboard(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_EMOJI_KEYBOARD, true)
+    }
+
+    /**
+     * Tells if the like button should be visible or not.
+     *
+     * @return true to show emoji keyboard button.
+     */
+    fun showLike(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_SHOW_LIKE, true)
     }
 
     /**
