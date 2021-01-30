@@ -113,6 +113,14 @@
         tools:ignore="MissingConstraints" />
 
     <ImageButton
+        android:id="@+id/like"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:src="@drawable/ic_baseline_thumb_up_24"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
         android:id="@+id/composerEmojiButton"
         android:layout_width="0dp"
         android:layout_height="0dp"

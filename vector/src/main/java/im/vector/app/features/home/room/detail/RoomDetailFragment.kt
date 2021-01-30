@@ -315,6 +315,7 @@ class RoomDetailFragment @Inject constructor(
         setupJumpToBottomView()
         setupConfBannerView()
         setupEmojiPopup()
+        setupLike()
 
         views.roomToolbarContentView.debouncedClicks {
             navigator.openRoomProfile(requireActivity(), roomDetailArgs.roomId)
@@ -527,6 +528,11 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
+    private fun setupLike() {
+        views.composerLayout.views.like.debouncedClicks {
+            sendTextMessage("\uD83D\uDC4D")
+        }
+    }
     private fun joinJitsiRoom(jitsiWidget: Widget, enableVideo: Boolean) {
         navigator.openRoomWidget(requireContext(), roomDetailArgs.roomId, jitsiWidget, mapOf(JitsiCallViewModel.ENABLE_VIDEO_OPTION to enableVideo))
     }
