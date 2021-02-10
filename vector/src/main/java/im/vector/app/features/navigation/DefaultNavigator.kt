@@ -34,6 +34,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
+import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.keysbackup.setup.KeysBackupSetupActivity
@@ -73,7 +74,6 @@ import org.matrix.android.sdk.api.session.room.model.thirdparty.RoomDirectoryDat
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -229,10 +229,13 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
-        // if cross signing is enabled we should propose full 4S
+        // if cross signing is enabled and trusted or not set up at all we should propose full 4S
         sessionHolder.getSafeActiveSession()?.let { session ->
-            if (session.cryptoService().crossSigningService().canCrossSign() && context is AppCompatActivity) {
-                BootstrapBottomSheet.show(context.supportFragmentManager, SetupMode.NORMAL)
+            if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null
+                    || session.cryptoService().crossSigningService().canCrossSign()) {
+                (context as? AppCompatActivity)?.let {
+                    BootstrapBottomSheet.show(it.supportFragmentManager, SetupMode.NORMAL)
+                }
             } else {
                 context.startActivity(KeysBackupSetupActivity.intent(context, showManualExport))
             }
@@ -253,14 +256,13 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(RoomProfileActivity.newIntent(context, roomId, directAccess))
     }
 
-    override fun openBigImageViewer(activity: Activity, sharedElement: View?, matrixItem: MatrixItem) {
-        matrixItem.avatarUrl
+    override fun openBigImageViewer(activity: Activity, sharedElement: View?, mxcUrl: String?, title: String?) {
+        mxcUrl
                 ?.takeIf { it.isNotBlank() }
                 ?.let { avatarUrl ->
-                    val intent = BigImageViewerActivity.newIntent(activity, matrixItem.getBestName(), avatarUrl)
+                    val intent = BigImageViewerActivity.newIntent(activity, title, avatarUrl)
                     val options = sharedElement?.let {
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it)
-                                ?: "")
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(activity, it, ViewCompat.getTransitionName(it) ?: "")
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
@@ -341,6 +343,11 @@ class DefaultNavigator @Inject constructor(
 
     override fun openSearch(context: Context, roomId: String) {
         val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
+        context.startActivity(intent)
+    }
+
+    override fun openCallTransfer(context: Context, callId: String) {
+        val intent = CallTransferActivity.newIntent(context, callId)
         context.startActivity(intent)
     }
 

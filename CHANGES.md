@@ -1,11 +1,68 @@
-Changes in Element 1.0.15 (2020-XX-XX)
+Changes in Element 1.0.18 (2020-XX-XX)
 ===================================================
 
 Features ✨:
+ - VoIP : support for VoIP V1 protocol, transfer call and dial-pad
+                                
+Improvements 🙌:
+ - VoIP : new tiles in timeline
+
+Bugfix 🐛:
+ - VoIP : fix audio devices output
+
+Translations 🗣:
  -
 
-Improvements 🙌:
+SDK API changes ⚠️:
+ - 
+
+Build 🧱:
  -
+
+Test:
+ -
+
+Other changes:
+ -
+
+Changes in Element 1.0.17 (2020-02-09)
+===================================================
+
+Improvements 🙌:
+ - Create a WidgetItemFactory and use it for better rendering of Jitsi widget change (video conference)
+ - Open image from URL Preview (#2705)
+
+Bugfix 🐛:
+ - Bug in WidgetContent.computeURL() (#2767)
+ - Duplicate thumbs | Mobile reactions for 👍 and 👎 are not the same as web (#2776)
+ - Join room by alias other federation error (#2778)
+ - HTML unescaping for URL preview (#2766)
+ - URL preview on reply fallback (#2756)
+ - RTL: some arrows should be rotated in RTL (#2757)
+ - Properly delete objects from Realm DB (#2765)
+
+Build 🧱:
+ - Upgrade build tools
+
+Other changes:
+ - Change app name from "Element (Riot.im)" to "Element"
+
+Changes in Element 1.0.16 (2020-02-04)
+===================================================
+
+Bugfix 🐛:
+ - Fix crash on API < 30 and light theme (#2774)
+
+Changes in Element 1.0.15 (2020-02-03)
+===================================================
+
+Features ✨:
+ - Social Login support
+
+Improvements 🙌:
+ - SSO support for cross signing (#1062)
+ - Deactivate account when logged in with SSO (#1264)
+ - SSO UIA doesn't work (#2754)
 
 Bugfix 🐛:
  - Fix clear cache issue: sometimes, after a clear cache, there is still a token, so the init sync service is not started.
@@ -13,18 +70,16 @@ Bugfix 🐛:
  - UrlPreview should be updated when the url is edited and changed (#2678)
  - When receiving a new pepper from identity server, use it on the next hash lookup (#2708)
  - Crashes reported by PlayStore (new in 1.0.14) (#2707)
-
-Translations 🗣:
- -
+ - Widgets: Support $matrix_widget_id parameter (#2748)
+ - Data for Worker overload (#2721)
+ - Fix multiple tasks
+ - Object deletion in database is not complete (#2759)
 
 SDK API changes ⚠️:
  - Increase targetSdkVersion to 30 (#2600)
 
 Build 🧱:
  - Compile with Android SDK 30 (Android 11)
-
-Test:
- -
 
 Other changes:
  - Update Dagger to 2.31 version so we can use the embedded AssistedInject feature 

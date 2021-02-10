@@ -25,9 +25,11 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.preference.UserAvatarPreference
 import im.vector.app.features.MainActivity
+import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.call.CallControlsBottomSheet
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.conference.VectorJitsiActivity
+import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
@@ -145,6 +147,8 @@ interface ScreenComponent {
     fun inject(activity: VectorJitsiActivity)
     fun inject(activity: SearchActivity)
     fun inject(activity: UserCodeActivity)
+    fun inject(activity: CallTransferActivity)
+    fun inject(activity: ReAuthActivity)
 
     /* ==========================================================================================
      * BottomSheets

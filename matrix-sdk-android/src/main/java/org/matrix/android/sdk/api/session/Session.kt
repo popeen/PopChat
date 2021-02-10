@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
 import org.matrix.android.sdk.api.session.user.UserService
 import org.matrix.android.sdk.api.session.widgets.WidgetService
@@ -213,6 +214,11 @@ interface Session :
     fun searchService(): SearchService
 
     /**
+     * Returns the third party service associated with the session
+     */
+    fun thirdPartyService(): ThirdPartyService
+
+    /**
      * Add a listener to the session.
      * @param listener the listener to add.
      */
@@ -244,6 +250,8 @@ interface Session :
     }
 
     val sharedSecretStorageService: SharedSecretStorageService
+
+    fun getUiaSsoFallbackUrl(authenticationSessionId: String): String
 
     /**
      * Maintenance API, allows to print outs info on DB size to logcat
