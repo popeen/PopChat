@@ -53,7 +53,6 @@ import org.matrix.android.sdk.api.session.room.model.call.CallHangupContent
 import org.matrix.android.sdk.api.session.room.model.call.CallInviteContent
 import org.matrix.android.sdk.api.session.room.model.call.CallNegotiateContent
 import org.matrix.android.sdk.api.session.room.model.call.SdpType
-import org.matrix.android.sdk.internal.util.awaitCallback
 import org.threeten.bp.Duration
 import org.webrtc.AudioSource
 import org.webrtc.AudioTrack
@@ -420,9 +419,7 @@ class WebRtcCall(val mxCall: MxCall,
 
     private suspend fun getTurnServer(): TurnServerResponse? {
         return tryOrNull {
-            awaitCallback {
-                sessionProvider.get()?.callSignalingService()?.getTurnServer(it)
-            }
+            sessionProvider.get()?.callSignalingService()?.getTurnServer()
         }
     }
 
@@ -476,7 +473,6 @@ class WebRtcCall(val mxCall: MxCall,
 
         if (camera != null) {
             val videoCapturer = cameraIterator.createCapturer(camera.name, object : CameraEventsHandlerAdapter() {
-
                 override fun onFirstFrameAvailable() {
                     super.onFirstFrameAvailable()
                     videoCapturerIsInError = false
@@ -490,7 +486,6 @@ class WebRtcCall(val mxCall: MxCall,
                     videoCapturerIsInError = true
                     val cameraManager = context.getSystemService<CameraManager>()
                     cameraAvailabilityCallback = object : CameraManager.AvailabilityCallback() {
-
                         override fun onCameraUnavailable(cameraId: String) {
                             super.onCameraUnavailable(cameraId)
                             Timber.v("On camera unavailable: $cameraId")

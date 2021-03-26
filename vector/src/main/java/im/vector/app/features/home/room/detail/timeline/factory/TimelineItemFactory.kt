@@ -16,7 +16,8 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import im.vector.app.core.epoxy.EmptyItem_
+import im.vector.app.core.epoxy.TimelineEmptyItem
+import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -36,7 +37,11 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val callItemFactory: CallItemFactory,
                                               private val userPreferencesProvider: UserPreferencesProvider) {
 
+    /**
+     * Reminder: nextEvent is older and prevEvent is newer.
+     */
     fun create(event: TimelineEvent,
+               prevEvent: TimelineEvent?,
                nextEvent: TimelineEvent?,
                eventIdToHighlight: String?,
                callback: TimelineEventController.Callback?): VectorEpoxyModel<*> {
@@ -45,7 +50,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
         val computedModel = try {
             when (event.root.getClearType()) {
                 EventType.STICKER,
-                EventType.MESSAGE               -> messageItemFactory.create(event, nextEvent, highlight, callback)
+                EventType.MESSAGE               -> messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                 // State and call
                 EventType.STATE_ROOM_TOMBSTONE,
                 EventType.STATE_ROOM_NAME,
@@ -59,7 +64,6 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.STATE_ROOM_SERVER_ACL,
                 EventType.STATE_ROOM_GUEST_ACCESS,
                 EventType.STATE_ROOM_POWER_LEVELS,
-                EventType.REACTION,
                 EventType.REDACTION             -> noticeItemFactory.create(event, highlight, callback)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(event, highlight, callback)
@@ -75,9 +79,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.ENCRYPTED             -> {
                     if (event.root.isRedacted()) {
                         // Redacted event, let the MessageItemFactory handle it
-                        messageItemFactory.create(event, nextEvent, highlight, callback)
+                        messageItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                     } else {
-                        encryptedItemFactory.create(event, nextEvent, highlight, callback)
+                        encryptedItemFactory.create(event, prevEvent, nextEvent, highlight, callback)
                     }
                 }
                 EventType.STATE_ROOM_ALIASES,
@@ -86,6 +90,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.KEY_VERIFICATION_KEY,
                 EventType.KEY_VERIFICATION_READY,
                 EventType.KEY_VERIFICATION_MAC,
+                EventType.REACTION,
                 EventType.CALL_CANDIDATES,
                 EventType.CALL_REPLACES,
                 EventType.CALL_SELECT_ANSWER,
@@ -114,6 +119,12 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             Timber.e(throwable, "failed to create message item")
             defaultItemFactory.create(event, highlight, callback, throwable)
         }
-        return (computedModel ?: EmptyItem_())
+        return computedModel ?: buildEmptyItem(event)
+    }
+
+    private fun buildEmptyItem(timelineEvent: TimelineEvent): TimelineEmptyItem {
+        return TimelineEmptyItem_()
+                .id(timelineEvent.localId)
+                .eventId(timelineEvent.eventId)
     }
 }

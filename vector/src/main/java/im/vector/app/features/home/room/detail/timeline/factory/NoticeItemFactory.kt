@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import android.view.View
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
@@ -36,12 +35,12 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
                highlight: Boolean,
                callback: TimelineEventController.Callback?): NoticeItem? {
         val formattedText = eventFormatter.format(event) ?: return null
-        val informationData = informationDataFactory.create(event, null)
+        val informationData = informationDataFactory.create(event, null, null)
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
                 noticeText = formattedText,
-                itemLongClickListener = View.OnLongClickListener { view ->
+                itemLongClickListener = { view ->
                     callback?.onEventLongClicked(informationData, null, view) ?: false
                 },
                 readReceiptsCallback = callback,

@@ -31,7 +31,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
-import im.vector.app.databinding.FragmentLoadingBinding
+import im.vector.app.databinding.ActivityMainBinding
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.login.LoginActivity
@@ -43,6 +43,7 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.signout.soft.SoftLogoutActivity
+import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.Dispatchers
@@ -66,7 +67,7 @@ data class MainActivityArgs(
  * This Activity, when started with argument, is also doing some cleanup when user signs out,
  * clears cache, is logged out, or is soft logged out
  */
-class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActivity {
+class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity {
 
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"
@@ -81,7 +82,9 @@ class MainActivity : VectorBaseActivity<FragmentLoadingBinding>(), UnlockedActiv
         }
     }
 
-    override fun getBinding() = FragmentLoadingBinding.inflate(layoutInflater)
+    override fun getBinding() = ActivityMainBinding.inflate(layoutInflater)
+
+    override fun getOtherThemes() = ActivityOtherThemes.Launcher
 
     private lateinit var args: MainActivityArgs
 

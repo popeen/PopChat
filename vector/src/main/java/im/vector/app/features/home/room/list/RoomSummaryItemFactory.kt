@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.list
 
-import android.view.View
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
@@ -93,7 +92,8 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         return RoomSummaryItem_()
                 .id(roomSummary.roomId)
                 .avatarRenderer(avatarRenderer)
-                .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
+                // We do not display shield in the room list anymore
+                // .encryptionTrustLevel(roomSummary.roomEncryptionTrustLevel)
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
@@ -109,7 +109,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                     onLongClick?.invoke(roomSummary) ?: false
                 }
                 .itemClickListener(
-                        DebouncedClickListener(View.OnClickListener { _ ->
+                        DebouncedClickListener({
                             onClick?.invoke(roomSummary)
                         })
                 )
